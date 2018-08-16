@@ -1,0 +1,28 @@
+version: '2'
+services:
+  php:
+    restart: always
+    build: data/php/
+    ports:
+      - "80:80"
+    working_dir: /var/www/html
+    volumes:
+      - "./data/htdocs:/var/www/html"
+    environment:
+      TZ: "Asia/Tokyo"
+      ORACLE_HOME: /opt/oracle/instantclient_12_1
+      LD_LIBRARY_PATH: /opt/oracle/instantclient_12_1
+    depends_on:
+      - mysql
+    links:
+      - mysql
+  oracle:
+    image: sath89/oracle-12c
+    ports:
+      - "8080:8080"
+      - "1521:1521"
+    environment:
+      ORACLE_SID: xe
+      ORACLE_PDB: xe
+    volumes:
+     - "./data/oracle:/u01/app/oracle"
